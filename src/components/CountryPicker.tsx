@@ -8,6 +8,7 @@ import Loading from './Loading';
 import Stats from './Stats';
 import useDataApi from '../hooks/useDataApi';
 import { ICountryResponse } from '../types';
+import Row from './Row';
 
 const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT;
 
@@ -52,12 +53,13 @@ const CountryPicker = () => {
     return <Loading speed={300} />;
   }
 
-  if (isError) {
-    return <Error message="Something problem" />;
-  }
-
   return (
     <CountrySection className="center-text">
+      {isError && (
+        <Row>
+          <Error message="There was a problem fetching countries" />
+        </Row>
+      )}
       {data && data.iso3 && (
         <>
           <WrapperSelect>
@@ -67,10 +69,7 @@ const CountryPicker = () => {
               onSelect={code => setSelectedCountry(data.iso3[code])}
             />
           </WrapperSelect>
-          <Stats
-            title=""
-            url={`${API_ENDPOINT}/countries/${selectedCountry}`}
-          />
+          <Stats url={`${API_ENDPOINT}/countries/${selectedCountry}`} />
         </>
       )}
     </CountrySection>
