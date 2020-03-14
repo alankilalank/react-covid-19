@@ -2,6 +2,8 @@
 
 This repository contains simple data monitoring for Covid-19 using React.js
 
+- [Demo](https://react-covid-19.now.sh)
+
 **Feature Include**
 
 - Hooks
