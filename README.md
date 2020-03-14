@@ -1,5 +1,3 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) with typescript template.
-
 ## React Covid-19
 
 This repository contains simple data monitoring for Covid-19 using React.js
@@ -22,4 +20,4 @@ This repository contains simple data monitoring for Covid-19 using React.js
 
 ## Data Source
 
-Data source from [https://github.com/mathdroid/covid-19-api](https://covid19.mathdro.id) API
+Data source from [https://covid19.mathdro.id](https://github.com/mathdroid/covid-19-api) API
