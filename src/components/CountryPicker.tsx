@@ -42,12 +42,19 @@ const WrapperSelect = styled.div`
 `;
 
 const CountryPicker = () => {
-  const [selectedCountry, setSelectedCountry] = React.useState('ID');
+  const [selectedCountry, setSelectedCountry] = React.useState('');
 
   const [{ data, isLoading, isError }] = useDataApi<ICountryResponse>({
     initUrl: `${API_ENDPOINT}/countries`,
     defaultData: {},
   });
+
+  React.useEffect(() => {
+    fetch(`https://ipapi.co/country`)
+      .then(res => res.text())
+      .then(setSelectedCountry)
+      .catch(() => setSelectedCountry("ID"));
+  }, []);
 
   if (isLoading) {
     return <Loading speed={300} />;
@@ -60,7 +67,7 @@ const CountryPicker = () => {
           <Error message="There was a problem fetching countries" />
         </Row>
       )}
-      {data && data.iso3 && (
+      {data && data.iso3 && selectedCountry !== "" && (
         <>
           <WrapperSelect>
             <ReactFlagsSelect
