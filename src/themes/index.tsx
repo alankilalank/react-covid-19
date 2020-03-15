@@ -67,7 +67,7 @@ export const GlobalStyles = createGlobalStyle`
   }
   .container {
     max-width: 800px;
-    margin: 0 auto;
+    margin: 0px auto 8rem auto;
     min-height: 100vh;
   }
   .center-text {
