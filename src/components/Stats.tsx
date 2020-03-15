@@ -7,6 +7,7 @@ import Card from './Card';
 import Error from './Error';
 import { mediaQuery } from '../themes';
 import { IStatsResponse } from '../types';
+import Row from './Row';
 
 const StatSection = styled.section`
   display: block;
@@ -33,15 +34,9 @@ const StatSubtitle = styled.span`
   color: ${({ theme }) => theme.colors.primary};
 `;
 
-const Row = styled.div`
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-`;
-
 interface StatProps {
   url: string;
-  title: string;
+  title?: string;
 }
 
 const Stats: React.FC<StatProps> = ({ url, title }) => {
@@ -50,35 +45,44 @@ const Stats: React.FC<StatProps> = ({ url, title }) => {
     defaultData: {},
   });
 
-  if (isError) {
-    return <Error message="No Data Available" />;
-  }
   return (
     <StatSection className="center-text">
-      <StatHeading>
-        {title && <StatTitle>{title}</StatTitle>}
-        <StatSubtitle>
-          Last updated: {data?.lastUpdate && formatDate(data.lastUpdate)}
-        </StatSubtitle>
-      </StatHeading>
-      <Row>
-        {data && (
-          <>
-            <Card info="warning" loading={isLoading}>
-              <h2>{data.confirmed && formatNumber(data.confirmed.value)}</h2>
-              <h4>Confirmed</h4>
-            </Card>
-            <Card info="danger" loading={isLoading}>
-              <h2>{data.deaths && formatNumber(data.deaths.value)}</h2>
-              <h4>Deaths</h4>
-            </Card>
-            <Card info="success" loading={isLoading}>
-              <h2>{data.recovered && formatNumber(data.recovered.value)}</h2>
-              <h4>Recovered</h4>
-            </Card>
-          </>
-        )}
-      </Row>
+      {isError ? (
+        <Row>
+          <Error message="No Data Available" />
+        </Row>
+      ) : (
+        <>
+          <StatHeading>
+            {title && <StatTitle>{title}</StatTitle>}
+            <StatSubtitle>
+              Last updated: {data?.lastUpdate && formatDate(data.lastUpdate)}
+            </StatSubtitle>
+          </StatHeading>
+          <Row>
+            {data && (
+              <>
+                <Card info="warning" loading={isLoading}>
+                  <h2>
+                    {data.confirmed && formatNumber(data.confirmed.value)}
+                  </h2>
+                  <h4>Confirmed</h4>
+                </Card>
+                <Card info="danger" loading={isLoading}>
+                  <h2>{data.deaths && formatNumber(data.deaths.value)}</h2>
+                  <h4>Deaths</h4>
+                </Card>
+                <Card info="success" loading={isLoading}>
+                  <h2>
+                    {data.recovered && formatNumber(data.recovered.value)}
+                  </h2>
+                  <h4>Recovered</h4>
+                </Card>
+              </>
+            )}
+          </Row>
+        </>
+      )}
     </StatSection>
   );
 };
