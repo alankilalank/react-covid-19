@@ -7,9 +7,10 @@ export interface StringMap {
   [key: string]: string;
 }
 
-export interface ICountryResponse {
-  countries: Record<string, string>;
-  iso3: Record<string, string>;
+export interface ICountry {
+  name: string;
+  iso2: string;
+  iso3: string;
 }
 
 export interface IStatsResponse {
@@ -18,6 +19,10 @@ export interface IStatsResponse {
   deaths: ValueAndDetail;
   lastUpdate: Date;
 }
+
+export type CountryResponse = {
+  countries: ICountry[];
+};
 
 export type UseDataApiArgs = {
   initUrl: string;

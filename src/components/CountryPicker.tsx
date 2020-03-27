@@ -7,7 +7,7 @@ import Error from './Error';
 import Loading from './Loading';
 import Stats from './Stats';
 import useDataApi from '../hooks/useDataApi';
-import { ICountryResponse } from '../types';
+import { CountryResponse } from '../types';
 import Row from './Row';
 
 const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT;
@@ -43,18 +43,23 @@ const WrapperSelect = styled.div`
 
 const CountryPicker = () => {
   const [selectedCountry, setSelectedCountry] = React.useState('');
+  const [countries, setCountries] = React.useState<string[]>([]);
 
-  const [{ data, isLoading, isError }] = useDataApi<ICountryResponse>({
+  const [{ data, isLoading, isError }] = useDataApi<CountryResponse>({
     initUrl: `${API_ENDPOINT}/countries`,
     defaultData: {},
   });
 
   React.useEffect(() => {
+    if (data && data.countries) {
+      const iso2 = data.countries.map(c => c.iso2);
+      setCountries(iso2);
+    }
     fetch(`https://ipapi.co/country`)
       .then(res => res.text())
       .then(setSelectedCountry)
-      .catch(() => setSelectedCountry("ID"));
-  }, []);
+      .catch(() => setSelectedCountry('ID'));
+  }, [data]);
 
   if (isLoading) {
     return <Loading speed={300} />;
@@ -67,13 +72,14 @@ const CountryPicker = () => {
           <Error message="There was a problem fetching countries" />
         </Row>
       )}
-      {data && data.iso3 && selectedCountry !== "" && (
+      {selectedCountry && (
         <>
           <WrapperSelect>
             <ReactFlagsSelect
+              countries={countries}
               searchable={true}
               defaultCountry={selectedCountry}
-              onSelect={code => setSelectedCountry(data.iso3[code])}
+              onSelect={code => setSelectedCountry(code)}
             />
           </WrapperSelect>
           <Stats url={`${API_ENDPOINT}/countries/${selectedCountry}`} />
