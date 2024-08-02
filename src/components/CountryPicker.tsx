@@ -58,7 +58,11 @@ const CountryPicker = () => {
     fetch(`https://ipapi.co/country`)
       .then(res => res.text())
       .then(setSelectedCountry)
-      .catch(() => setSelectedCountry('ID'));
+      .catch(() => fetch(`https://api.ip2location.io/`)
+        .then(res => res.json())
+        .then(json => setSelectedCountry(json.country_code))
+        .catch(() => setSelectedCountry('ID'));
+      );
   }, [data]);
 
   if (isLoading) {
